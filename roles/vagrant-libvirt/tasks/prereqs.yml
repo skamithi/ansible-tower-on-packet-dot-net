@@ -1,0 +1,10 @@
+---
+- name: install yum packages to get vagrant-libvirt to work
+  yum:
+    name: "{{ item }}"
+  with_items: "{{ vagrant_prereq_rpms }}"
+
+- name: make git directory
+  file:
+    path: /root/git
+    state: directory

@@ -1,0 +1,25 @@
+---
+- name: install chef bento for building vagrant boxes
+  git:
+     repo: "https://github.com/chef/bento"
+     dest: /root/git/bento
+     update: no
+
+
+- block:
+  - name: check if packer file exists
+    file:
+      path: /usr/local/bin/packer
+      state: file
+  rescue:
+    - name: download packer
+      get_url:
+        url: "https://releases.hashicorp.com/packer/{{ packer_version}}/packer_{{ packer_version }}_linux_amd64.zip"
+        dest: /tmp
+      register: packer_zip
+
+    - name: unarchive packer file
+      unarchive:
+        src: "{{ packer_zip.dest }}"
+        dest: "/usr/local/bin/"
+        remote_src: yes

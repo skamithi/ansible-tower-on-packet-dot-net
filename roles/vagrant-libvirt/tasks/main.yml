@@ -1,0 +1,7 @@
+---
+- import_tasks: prereqs.yml
+- import_tasks: vagrant.yml
+- import_tasks: packer.yml
+  tags: install_packer
+- import_tasks: build_box.yml
+  tags: build_box

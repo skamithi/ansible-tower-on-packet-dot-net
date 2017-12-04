@@ -1,0 +1,11 @@
+vagrant_prereq_rpms:
+  - qemu-kvm
+  - libvirt-daemon
+  - libvirt
+  - libvirt-devel
+  - gcc
+  - vim-enhanced
+  - qemu-system-x86
+  - git
+  - tar
+  - unzip

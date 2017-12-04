@@ -1,0 +1,30 @@
+---
+- block:
+    - name: check if vagrant is installed
+      yum:
+        name: vagrant
+  rescue:
+    - name: "download vagrant {{ vagrant_version }}"
+      get_url:
+        url: "https://releases.hashicorp.com/vagrant/{{ vagrant_version}}/vagrant_{{ vagrant_version }}_x86_64.rpm"
+        dest: /tmp
+      register: vagrant_download
+
+    - name: install vagrant rpm
+      yum:
+        name: "{{ vagrant_download.dest }}"
+        state: present
+
+- block:
+    - name: check if vagrant-libvirt is installed
+      shell: vagrant plugin list | grep libvirt
+      changed_when: false
+  rescue:
+    - name: install vagrant-libvirt
+      shell: vagrant plugin install vagrant-libvirt
+
+- name: ensure libvirtd is started
+  service:
+     name: libvirtd
+     state: started
+     enabled: yes

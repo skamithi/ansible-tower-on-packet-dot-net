@@ -1,0 +1,32 @@
+---
+- name: install ansible
+  yum:
+    name: ansible
+- name: grab tower setup
+  git:
+    repo: "{{ tower_setup_repo }}"
+    dest: "{{ tower_setup_dir }}"
+    version: multi-cluster
+
+- block:
+  - name: run vagrant provision the ansible setup server (not idempotent)
+    shell: vagrant provision ansiblesetup
+    args:
+      chdir: "{{ tower_setup_dir }}"
+    register: ansibleserver
+    failed_when: '"Domain is not created" in ansibleserver.stdout'
+  rescue:
+  - name: vagrant up the ansible setup server
+    shell: vagrant up ansiblesetup
+    args:
+      chdir: "{{ tower_setup_dir }}"
+
+- name: install the remaining servers (not idempotent)
+  shell: vagrant up
+  args:
+    chdir: "{{ tower_setup_dir }}"
+
+- name: run vagrant provision on all hosts cause some dont get provisioned
+  shell: vagrant provision
+  args:
+     chdir: "{{ tower_setup_dir }}"
