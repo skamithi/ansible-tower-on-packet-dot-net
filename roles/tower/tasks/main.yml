@@ -22,7 +22,7 @@
       chdir: "{{ tower_setup_dir }}"
 
 - name: install the remaining servers (not idempotent)
-  shell: vagrant up
+  shell: vagrant up --no-parallel
   args:
     chdir: "{{ tower_setup_dir }}"
 
