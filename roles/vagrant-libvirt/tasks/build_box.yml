@@ -10,7 +10,7 @@
   shell: "packer build -only qemu {{ centos_packer_file | basename }}"
   args:
     chdir:  "{{ centos_packer_file | dirname }}"
-    creates: "{{ centos_packer_file | dirname }}/../builds/centos-7.4.libvirt.box"
+    creates: "{{ centos_packer_file | dirname }}/../builds/centos-{{centos_version}}.libvirt.box"
   register: packer_build
 
 - block:
@@ -19,4 +19,4 @@
       changed_when: false
   rescue:
     - name: install centos vagrant box
-      shell: " vagrant box add  {{ centos_packer_file | dirname }}/../builds/centos-7.4.libvirt.box --name centos7"
+      shell: " vagrant box add  {{ centos_packer_file | dirname }}/../builds/centos-{{centos_version}}.libvirt.box --name centos7"
